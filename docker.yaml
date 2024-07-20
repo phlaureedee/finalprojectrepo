@@ -1,5 +1,5 @@
 ---
-  - name: Install Docker and run container
+- name: Install Docker and run container
   hosts: all
   become: yes
   tasks:
