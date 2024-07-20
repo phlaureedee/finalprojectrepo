@@ -1,7 +1,7 @@
 ---
-    - name: Install Docker
+  - name: Install Docker and run container
   hosts: all
-  become: true
+  become: yes
   tasks:
     - name: Update the apt package index
       apt:
@@ -9,7 +9,7 @@
 
     - name: Install packages to allow apt to use a repository over HTTPS
       apt:
-        name: 
+        name:
           - apt-transport-https
           - ca-certificates
           - curl
@@ -35,6 +35,23 @@
       service:
         name: docker
         state: started
-        enabled: yes 
+        enabled: yes
+
+    - name: Install Git
+      apt:
+        name: git
+        state: present
+
+    - name: Clone the GitHub repository
+      git:
+        repo: 'https://github.com/phlaureedee/finalprojectrepo.git'
+        dest: /tmp/finalprojectrepo
+        version: master
+
+    - name: Build Docker image
+      command: docker build -t mywebapp:v1 /tmp/finalprojectrepo
+
+    - name: Run Docker container
+      command: docker run -d --name myapp -p 30000:8080 mywebapp:v1
 ...
           
