@@ -1,5 +1,6 @@
 ---
 - name: Install Docker and run container
+  hosts: all
   become: yes
   tasks:
     - name: Update the apt package index
