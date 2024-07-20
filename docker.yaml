@@ -1,6 +1,6 @@
 ---
 - name: Install Docker and run container
-  hosts: 18.209.16.175
+  hosts: all
   become: yes
   tasks:
     - name: Update the apt package index
