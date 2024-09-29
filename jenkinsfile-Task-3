@@ -9,7 +9,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Clone the repository from GitHub
-                git branch: 'main', url: 'https://github.com/jawadsaeed26/myproject.git'
+                git branch: 'main', url: 'https://github.com/phlaureedee/finalprojectrepo.git'
             }
         }
 
