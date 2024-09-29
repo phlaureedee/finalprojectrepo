@@ -1,0 +1,32 @@
+pipeline {
+    agent { label 'stag' } // Use the label of your slave node
+    stages {
+        stage('Checkout') {
+            steps {
+                // Use the public repository URL
+                git branch: 'main', url: 'https://github.com/jawadsaeed26/myproject.git'
+            }
+        }
+        stage('Compile') {
+            steps {
+                script {
+                    sh 'mvn clean compile'
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                script {
+                    sh 'mvn test'
+                }
+            }
+        }
+        stage('Package') {
+            steps {
+                script {
+                    sh 'mvn clean package'
+                }
+            }
+        }
+    }
+}

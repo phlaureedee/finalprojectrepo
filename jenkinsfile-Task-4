@@ -1,0 +1,33 @@
+pipeline {
+    agent { label 'stag' }
+
+    stages {
+        stage('Clone Repository') {
+            steps {
+                git url: 'https://github.com/jawadsaeed26/myproject.git', branch: 'main'
+            }
+        }
+
+        stage('Clean Up Existing Docker Container') {
+            steps {
+                script {
+                    try {
+                        sh '''
+                        docker ps -q --filter "name=myapp" | grep -q . && docker stop myapp && docker rm myapp || echo "No container to remove"
+                        '''
+                    } catch (Exception e) {
+                        echo 'No container to remove'
+                    }
+                }
+            }
+        }
+
+        stage('Run Ansible Playbook') {
+            steps {
+                sh '''
+                ansible-playbook -i inventory.ini docker-playbook.yaml
+                '''
+            }
+        }
+    }
+}

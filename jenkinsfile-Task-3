@@ -1,0 +1,49 @@
+pipeline {
+    agent { label 'stag' }
+
+    environment {
+        DOCKER_IMAGE = "my-java-app:latest"
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // Clone the repository from GitHub
+                git branch: 'main', url: 'https://github.com/jawadsaeed26/myproject.git'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    // Build the Docker image from the Dockerfile 
+                    sh 'docker build -t ${DOCKER_IMAGE} .'
+                }
+            }
+        }
+
+        stage('Deploy in Tomcat') {
+            steps {
+                script {
+                    // Stop and remove any running container (if exists)
+                    sh 'docker stop my-java-app-container || true'
+                    sh 'docker rm my-java-app-container || true'
+                    
+                    // Run the Docker container with the built image
+                    sh '''
+                    docker run -d -p 8080:8080 --name my-java-app-container ${DOCKER_IMAGE}
+                    '''
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline executed successfully!'
+        }
+        failure {
+            echo 'Pipeline execution failed.'
+        }
+    }
+}
