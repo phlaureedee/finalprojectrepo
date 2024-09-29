@@ -10,7 +10,7 @@
 
     - name: Clone the GitHub repository
       git:
-        repo: 'https://github.com/jawadsaeed26/myproject.git'
+        repo: 'https://github.com/phlaureedee/finalprojectrepo.git'
         dest: /tmp/java-app
         version: main
 
